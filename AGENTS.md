@@ -162,7 +162,8 @@ A ser adicionado (`react-router-dom`). Padrão sugerido:
 
 ## Status atual
 
-- Esqueleto criado: componentes de página, hooks e context vazios.
-- Estilos globais e de layout prontos (`index.css`, `styles.css`).
-- `App.jsx` ainda é o template padrão do Vite e deve ser substituído pelo shell do lab.
-- `main.jsx` renderiza apenas `<App />`; precisa envolver com providers (Theme + Router) quando implementados.
+- Implementação concluída: hooks (`useCounter`, `useLocalStorage`, `useTitulo`, `useResize`), `ThemeContext`, páginas e shell com React Router.
+- Dependência `react-router-dom` adicionada.
+- `App.jsx` renderiza o layout (sidebar + rotas) e consome `useTheme`.
+- `main.jsx` envolve a árvore com `BrowserRouter` e `ThemeProvider`, importando `index.css` e `styles.css`.
+- Lint e build passando.
