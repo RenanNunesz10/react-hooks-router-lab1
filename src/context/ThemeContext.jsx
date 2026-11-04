@@ -1,33 +1,20 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect } from 'react'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { createContext, useState } from 'react';
 
-const ThemeContext = createContext(null)
+// Cria o contexto: representa o tipo de dado compartilhado.
+export const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useLocalStorage('theme', 'light')
+  // O estado fica no componente provedor, acima das páginas.
+  const [tema, setTema] = useState('claro');
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
+  function alternarTema() {
+    setTema((anterior) => (anterior === 'claro' ? 'escuro' : 'claro'));
   }
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-  }, [theme])
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    // Qualquer descendente pode ler 'tema' e 'alternarTema' usando useContext.
+    <ThemeContext.Provider value={{ tema, alternarTema }}>
       {children}
     </ThemeContext.Provider>
-  )
+  );
 }
-
-export function useTheme() {
-  const context = useContext(ThemeContext)
-  if (!context) {
-    throw new Error('useTheme deve ser usado dentro de ThemeProvider')
-  }
-  return context
-}
-
-export default ThemeContext

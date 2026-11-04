@@ -1,27 +1,28 @@
-import { useState } from 'react'
-import { useTitulo } from '../hooks/useTitulo'
+import { useEffect, useState } from 'react';
 
 export default function Ex01Titulo() {
-  const [titulo, setTitulo] = useState('Laboratório React')
+  // useState guarda um valor que pode mudar após o clique.
+  const [cliques, setCliques] = useState(0);
 
-  useTitulo(titulo)
+  useEffect(() => {
+    // Sincroniza o documento (sistema externo ao React) com o estado.
+    document.title = `Cliques: ${cliques} | Laboratório React`;
+
+    // Cleanup: devolve o título original ao sair da página.
+    return () => {
+      document.title = 'Laboratório React: Hooks e Context';
+    };
+  }, [cliques]); // Repete o efeito quando 'cliques' muda.
 
   return (
-    <div className="panel">
-      <p className="eyebrow">Exercício 01</p>
-      <h1>Título da página</h1>
-      <p className="muted">
-        O título da aba do navegador acompanha o valor do input.
-      </p>
-      <div className="actions">
-        <input
-          type="text"
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
-          placeholder="Digite um título"
-          style={{ flex: 1, minWidth: 220 }}
-        />
-      </div>
-    </div>
-  )
+    <section className="panel">
+      <span className="eyebrow">Exercício 01 · useEffect</span>
+      <h1>Contador que altera o título da aba</h1>
+      <p>Observe o título da aba do navegador ao clicar.</p>
+      <p className="metric">{cliques} clique(s)</p>
+      <button onClick={() => setCliques((valor) => valor + 1)}>Adicionar clique</button>
+      <button onClick={() => setCliques(0)}>Zerar</button>
+      <p className="muted">Desafio: inclua um botão para zerar o contador.</p>
+    </section>
+  );
 }
