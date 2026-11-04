@@ -1,14 +1,14 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react';
 
-export function useCounter(initialValue = 0, step = 1) {
-  const [count, setCount] = useState(initialValue)
+// Hooks personalizados começam com 'use' e podem chamar outros hooks.
+export function useCounter(valorInicial = 0) {
+  const [contador, setContador] = useState(valorInicial);
 
-  const increment = useCallback(() => setCount((c) => c + step), [step])
-  const decrement = useCallback(() => setCount((c) => c - step), [step])
-  const reset = useCallback(() => setCount(initialValue), [initialValue])
-  const set = useCallback((value) => setCount(value), [])
+  // Atualização funcional: usa sempre o valor anterior mais recente.
+  const aumentar = () => setContador((valor) => valor + 1);
+  const diminuir = () => setContador((valor) => valor - 1);
+  const zerar = () => setContador(valorInicial);
 
-  return { count, increment, decrement, reset, set }
+  // Compartilhamos a lógica, não o mesmo estado entre os componentes.
+  return { contador, aumentar, diminuir, zerar };
 }
-
-export default useCounter

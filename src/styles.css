@@ -4,7 +4,7 @@ body { margin: 0; }
 button { cursor: pointer; font: inherit; background: #6047d8; color: white; border: 0; border-radius: 10px; padding: 10px 16px; }
 button:hover { filter: brightness(1.08); }
 button.secondary { background: #7c879d; }
-.layout { --bg: #f4f6fc; --card: #fff; --text: #25334f; --sub: #556580; --border: #e0e5f2;
+.layout { --bg: #f4f6fc; --card: #fff; --text: #293857; --sub: #556580; --border: #e0e5f2;
   min-height: 100vh; display: grid; grid-template-columns: 265px 1fr; background: var(--bg); color: var(--text); }
 .layout.dark { --bg: #171b29; --card: #252b3c; --text: #f4f6ff; --sub: #c0c9dc; --border: #454c65; }
 .sidebar { background: var(--card); border-right: 1px solid var(--border); padding: 30px 20px; }

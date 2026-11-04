@@ -1,50 +1,44 @@
-import { useState } from 'react'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext.jsx';
+import { useLocalStorage } from '../hooks/useLocalStorage.js';
+
+const tecnologias = ['React', 'Vite', 'React Router', 'JavaScript'];
 
 export default function Ex05Favoritos() {
-  const [favoritos, setFavoritos] = useLocalStorage('favoritos', [])
-  const [novo, setNovo] = useState('')
+  const { tema } = useContext(ThemeContext); // Contexto do exercício 03.
+  const [favoritos, setFavoritos] = useLocalStorage('lab-favoritos', []);
 
-  const adicionar = () => {
-    const nome = novo.trim()
-    if (!nome) return
-    setFavoritos((prev) => [...prev, { id: Date.now(), nome }])
-    setNovo('')
-  }
-
-  const remover = (id) => {
-    setFavoritos((prev) => prev.filter((item) => item.id !== id))
+  function alternarFavorito(tecnologia) {
+    // Atualiza o array SEM modificá-lo diretamente.
+    setFavoritos((anteriores) =>
+      anteriores.includes(tecnologia)
+        ? anteriores.filter((item) => item !== tecnologia)
+        : [...anteriores, tecnologia]
+    );
   }
 
   return (
-    <div className="panel">
-      <p className="eyebrow">Exercício 05</p>
-      <h1>Favoritos</h1>
-      <p className="muted">Persistidos em localStorage via useLocalStorage.</p>
-      <div className="actions">
-        <input
-          type="text"
-          value={novo}
-          onChange={(e) => setNovo(e.target.value)}
-          placeholder="Novo favorito"
-          style={{ flex: 1, minWidth: 220 }}
-        />
-        <button onClick={adicionar}>Adicionar</button>
-      </div>
-      {favoritos.length === 0 ? (
-        <p className="muted">Nenhum favorito ainda.</p>
-      ) : (
-        <ul style={{ marginTop: 16, paddingLeft: 20 }}>
-          {favoritos.map((item) => (
-            <li key={item.id} style={{ marginBottom: 8 }}>
-              {item.nome}{' '}
-              <button className="secondary" onClick={() => remover(item.id)}>
-                Remover
+    <section className="panel">
+      <span className="eyebrow">Exercício 05 · integração</span>
+      <h1>Favoritos persistentes</h1>
+      <p>
+        Contexto global: <strong>{tema}</strong> · Favoritos: <strong>{favoritos.length}</strong>
+      </p>
+      <div className="cards">
+        {tecnologias.map((tecnologia) => {
+          const favorito = favoritos.includes(tecnologia);
+          return (
+            <div className="subpanel" key={tecnologia}>
+              <h2>{tecnologia}</h2>
+              <button onClick={() => alternarFavorito(tecnologia)}>
+                {favorito ? '★ Remover dos favoritos' : '☆ Favoritar'}
               </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
+            </div>
+          );
+        })}
+      </div>
+      <p className="muted">Troque de rota e atualize a página: os favoritos continuam salvos.</p>
+      <p className="muted">Desafio: crie um botão para limpar todos os favoritos.</p>
+    </section>
+  );
 }

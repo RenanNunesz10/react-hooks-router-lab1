@@ -1,29 +1,26 @@
-import { useState, useCallback } from 'react'
+import { useEffect, useState } from 'react';
 
-export function useLocalStorage(key, initialValue) {
-  const [storedValue, setStoredValue] = useState(() => {
+// O hook combina estado do React com persistência no navegador.
+export function useLocalStorage(chave, valorInicial) {
+  const [valor, setValor] = useState(() => {
+    // A função inicializadora só é necessária na criação do estado.
     try {
-      const item = window.localStorage.getItem(key)
-      if (item !== null) return JSON.parse(item)
-      return typeof initialValue === 'function' ? initialValue() : initialValue
+      const salvo = window.localStorage.getItem(chave);
+      return salvo === null ? valorInicial : JSON.parse(salvo);
     } catch {
-      return typeof initialValue === 'function' ? initialValue() : initialValue
+      return valorInicial; // Ex.: dados inválidos ou armazenamento bloqueado.
     }
-  })
+  });
 
-  const setValue = useCallback((value) => {
-    setStoredValue((prev) => {
-      const next = typeof value === 'function' ? value(prev) : value
-      try {
-        window.localStorage.setItem(key, JSON.stringify(next))
-      } catch {
-        // ignora erros de storage (quota, modo privado, etc.)
-      }
-      return next
-    })
-  }, [key])
+  useEffect(() => {
+    // Efeito sincroniza estado do React com o localStorage.
+    try {
+      window.localStorage.setItem(chave, JSON.stringify(valor));
+    } catch {
+      // Nesta demo, erros de gravação não impedem a tela de funcionar.
+    }
+  }, [chave, valor]);
 
-  return [storedValue, setValue]
+  // Mesma interface do useState, mas com persistência.
+  return [valor, setValor];
 }
-
-export default useLocalStorage
