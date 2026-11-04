@@ -1,60 +1,54 @@
-import { NavLink, Routes, Route } from 'react-router-dom'
-import { useTheme } from './context/ThemeContext'
-import Home from './pages/Home'
-import Ex01Titulo from './pages/Ex01Titulo'
-import Ex02Resize from './pages/Ex02Resize'
-import Ex03Context from './pages/Ex03Context'
-import Ex04Counter from './pages/Ex04Counter'
-import Ex05Favoritos from './pages/Ex05Favoritos'
+import { useContext } from 'react';
+import { NavLink, Route, Routes } from 'react-router';
+import { ThemeContext } from './context/ThemeContext.jsx';
+import Home from './pages/Home.jsx';
+import Ex01Titulo from './pages/Ex01Titulo.jsx';
+import Ex02Resize from './pages/Ex02Resize.jsx';
+import Ex03Context from './pages/Ex03Context.jsx';
+import Ex04Counter from './pages/Ex04Counter.jsx';
+import Ex05Favoritos from './pages/Ex05Favoritos.jsx';
 
-const pages = [
-  { path: '/', label: 'Home' },
-  { path: '/ex01', label: '01 • Título' },
-  { path: '/ex02', label: '02 • Resize' },
-  { path: '/ex03', label: '03 • Context' },
-  { path: '/ex04', label: '04 • Counter' },
-  { path: '/ex05', label: '05 • Favoritos' },
-]
+const paginas = [
+  { caminho: '/', rotulo: 'Início' },
+  { caminho: '/exercicio-1', rotulo: '01 · Effect: título' },
+  { caminho: '/exercicio-2', rotulo: '02 · Effect: resize' },
+  { caminho: '/exercicio-3', rotulo: '03 · Context API' },
+  { caminho: '/exercicio-4', rotulo: '04 · Custom Hook' },
+  { caminho: '/exercicio-5', rotulo: '05 · Integração' },
+];
 
 export default function App() {
-  const { theme, toggleTheme } = useTheme()
+  // O tema é compartilhado com TODAS as páginas pelo Context API.
+  const { tema } = useContext(ThemeContext);
 
   return (
-    <div className={`layout ${theme === 'dark' ? 'dark' : ''}`}>
+    <div className={`layout ${tema === 'escuro' ? 'dark' : ''}`}>
       <aside className="sidebar">
         <div className="brand">⚛ Laboratório React</div>
         <p>5 exercícios demonstrativos</p>
 
         <nav aria-label="Exercícios">
-          {pages.map((pagina) => (
-            <NavLink
-              key={pagina.path}
-              to={pagina.path}
-              end={pagina.path === '/'}
-            >
-              {pagina.label}
+          {paginas.map((pagina) => (
+            // NavLink aplica 'active' automaticamente na rota selecionada.
+            <NavLink key={pagina.caminho} to={pagina.caminho} end>
+              {pagina.rotulo}
             </NavLink>
           ))}
         </nav>
-
-        <div className="actions" style={{ marginTop: 24 }}>
-          <button className="secondary" onClick={toggleTheme}>
-            Tema: {theme}
-          </button>
-        </div>
       </aside>
 
       <main className="content">
+        {/* React Router escolhe apenas o componente da rota atual. */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/ex01" element={<Ex01Titulo />} />
-          <Route path="/ex02" element={<Ex02Resize />} />
-          <Route path="/ex03" element={<Ex03Context />} />
-          <Route path="/ex04" element={<Ex04Counter />} />
-          <Route path="/ex05" element={<Ex05Favoritos />} />
+          <Route path="/exercicio-1" element={<Ex01Titulo />} />
+          <Route path="/exercicio-2" element={<Ex02Resize />} />
+          <Route path="/exercicio-3" element={<Ex03Context />} />
+          <Route path="/exercicio-4" element={<Ex04Counter />} />
+          <Route path="/exercicio-5" element={<Ex05Favoritos />} />
           <Route path="*" element={<h2>Página não encontrada.</h2>} />
         </Routes>
       </main>
     </div>
-  )
+  );
 }
